@@ -1,0 +1,58 @@
+https://learn.microsoft.com/fr-fr/training/modules/deploy-azure-functions/3-set-up-environment
+
+az account list-locations \
+  --query "[].{Name: name, DisplayName: displayName}" \
+  --output table
+  
+ az configure --defaults location=Francecentral
+ 
+resourceSuffix=$RANDOM
+ 
+webName="lylla-space-game-web${resourceSuffix}"
+leaderboardName="lylla-space-game-leaderboard${resourceSuffix}"
+storageName="storagegamelylla${resourceSuffix}"
+
+
+rgName='lylla-space-game-rg'
+planName='lylla-space-game-asp'
+
+az group create --name $rgName
+
+az appservice plan create \
+  --name $planName \
+  --resource-group $rgName \
+  --sku B1 \
+  --is-linux
+  
+ az webapp create \
+  --name $webName \
+  --resource-group $rgName \
+  --plan $planName \
+  --runtime "DOTNETCORE|6.0"
+  
+  az storage account create \
+  --name $storageName \
+  --resource-group $rgName \
+  --sku Standard_LRS
+  
+  az functionapp create \
+  --name $leaderboardName \
+  --resource-group $rgName \
+  --storage-account $storageName \
+  --functions-version 4 \
+  --consumption-plan-location francecentral
+  
+  az webapp list \
+  --resource-group $rgName \
+  --query "[].{hostName: lyllahostname123, state: state}" \
+  --output table
+  
+ az functionapp list \
+  --resource-group $rgName \
+  --query "[].{hostName: defaultHostName, state: state}" \
+  --output table
+  
+  image 15: prendre les variables du Yml et connecter avec valeur d'Azure.
+  connection SERVICE CAR c'est une template /Nom de la connexion de service	Resource Manager - Tailspin - Space Game.
+  
+  Nom variable groupe : dans Library , variable groupe ici Release
